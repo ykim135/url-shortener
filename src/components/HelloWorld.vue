@@ -40,7 +40,7 @@ export default {
       })
     },
     goToUrl: function () {
-      console.log(this.shortUrl)
+      // Backend todo : prepend http to output
       window.location.href = 'http://naver.com'
     }
   }
