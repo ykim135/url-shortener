@@ -9,6 +9,7 @@
     <div>
       <button v-on:click="getShortUrl()"> Convert! </button>
       <p> Shortened url: {{shortUrl}} </p>
+      <p> Status: {{ shortUrlValidationMsg }} </p>
     </div>
     <div>
       Enter shortened url! <input type="text" v-model="shortUrl">
@@ -27,8 +28,10 @@ export default {
   data () {
     return {
       msg: 'URL Shortening Service',
+      fullUrlValidationMsg: '',
       fullUrl: '',
-      shortUrl: ''
+      shortUrl: '',
+      shortUrlValidationMsg: ''
     }
   },
   methods: {
@@ -36,6 +39,7 @@ export default {
       axios.post('http://localhost:8081/api/short', {full_url: this.fullUrl})
       .then(response => {
         this.shortUrl = response.data['url']
+        this.shortUrlValidationMsg = response.data['msg']
       })
     },
     goToUrl: function () {
