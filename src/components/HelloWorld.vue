@@ -7,8 +7,8 @@
       Enter full url! <input type="text" v-model="fullUrl">
     </div>
     <div>
-      <button v-on:click="convertUrl()"> Convert! </button>
-      <p> Shortened url: {{userAgent}} </p>
+      <button v-on:click="getShortUrl()"> Convert! </button>
+      <p> Shortened url: {{shortUrl}} </p>
     </div>
     <div>
       Enter shortened url! <input type="text" v-model="shortUrl">
@@ -28,20 +28,23 @@ export default {
     return {
       msg: 'URL Shortening Service',
       fullUrl: '',
-      shortUrl: '',
-      userAgent: ''
+      shortUrl: ''
     }
   },
   methods: {
-    convertUrl: function () {
-      axios.get('https://api.github.com/users/codeheaven-io')
+    getShortUrl: function () {
+      axios.post('http://localhost:8081/api/short', {full_url: this.fullUrl})
       .then(response => {
-        this.userAgent = response.data['login']
+        this.shortUrl = response.data['url']
       })
     },
     goToUrl: function () {
-      // Backend todo : prepend http to output
-      window.location.href = 'http://naver.com'
+      axios.post('http://localhost:8081/api/full', {short_url: this.shortUrl})
+      .then(response => {
+        console.log(response)
+        this.fullUrl = response.data['url']
+        window.location.href = 'http://' + this.fullUrl
+      })
     }
   }
 }
